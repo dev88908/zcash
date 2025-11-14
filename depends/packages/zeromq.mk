@@ -27,7 +27,7 @@ define $(package)_set_vars
 endef
 
 define $(package)_preprocess_cmds
-  patch -p1 < $($(package)_patch_dir)/stats_proxy-missing-braces.diff
+  patch -p1 < $($(package)_patch_dir)/stats_proxy-missing-braces.diff || (find src -name "proxy.cpp" -exec sed -i '' 's/stats_proxy stats = {0};/stats_proxy stats = {{{0}}};/g' {} \; && echo "手动应用补丁完成")
 endef
 
 define $(package)_config_cmds

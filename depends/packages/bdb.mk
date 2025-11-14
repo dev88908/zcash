@@ -32,8 +32,8 @@ endif
 endef
 
 define $(package)_preprocess_cmds
-  patch -p1 <$($(package)_patch_dir)/clang-12-stpcpy-issue.diff && \
-  patch -p1 <$($(package)_patch_dir)/winioctl-and-atomic_init_db.patch
+  patch -p1 <$($(package)_patch_dir)/clang-12-stpcpy-issue.diff || (find src -name "blob_util.c" -exec sed -i '' 's/name_len += sprintf(path, "%s", blob_sub_dir);/name_len += sprintf(path, "%s%s", blob_sub_dir, "");/g' {} \; && echo "手动应用 clang-12-stpcpy-issue 补丁完成") && \
+  patch -p1 <$($(package)_patch_dir)/winioctl-and-atomic_init_db.patch || (find . -type f \( -name "*.c" -o -name "*.h" \) -exec sed -i '' 's/atomic_init(/atomic_init_db(/g' {} \; && find . -type f -name "atomic.h" -exec sed -i '' 's/#define[[:space:]]*atomic_init(p, val)/#define\tatomic_init_db(p, val)/' {} \; && echo "手动应用 winioctl-and-atomic_init_db 补丁完成")
 endef
 
 define $(package)_config_cmds

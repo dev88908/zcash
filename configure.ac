@@ -958,6 +958,11 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
  [ AC_MSG_RESULT(no); HAVE_WEAK_GETAUXVAL=0 ]
 )
 
+if test x$TARGET_OS = xdarwin; then
+  HAVE_STRONG_GETAUXVAL=0
+  HAVE_WEAK_GETAUXVAL=0
+fi
+
 dnl Check for reduced exports
 if test x$use_reduce_exports = xyes; then
   AX_CHECK_COMPILE_FLAG([-fvisibility=hidden],[RE_CXXFLAGS="-fvisibility=hidden"],
